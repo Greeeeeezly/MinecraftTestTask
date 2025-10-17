@@ -1,5 +1,6 @@
 package com.example.client.gui;
 
+import com.example.network.client.MessageClientNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -60,12 +61,18 @@ public class MessageScreen extends Screen {
     }
 
     private void sendMessage() {
-        if (client == null) {
+        if (client == null || inputField == null) {
             return;
         }
 
-        client.setScreen(null);
+        String text = inputField.getText().trim();
+        if (text.isEmpty()) {
+            return;
+        }
 
+        MessageClientNetworking.sendToServer(text);
+        inputField.setText("");
+        client.setScreen(null);
     }
 
     private void updateButtonState() {
