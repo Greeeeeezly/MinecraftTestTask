@@ -34,6 +34,14 @@ sourceSets {
 loom {
 	splitEnvironmentSourceSets()
 
+	mods {
+		"modid" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
 protobuf {
 	protoc {
 		artifact = "com.google.protobuf:protoc:${project.protobuf_version}"
@@ -47,15 +55,6 @@ protobuf {
 	}
 }
 
-	mods {
-		"modid" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
-		}
-	}
-
-}
-
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -67,6 +66,8 @@ dependencies {
 
 	implementation "com.google.protobuf:protobuf-java:${project.protobuf_version}"
 	implementation "org.postgresql:postgresql:${project.postgresql_version}"
+	implementation "org.hibernate.orm:hibernate-core:${project.hibernate_version}"
+	implementation "jakarta.persistence:jakarta.persistence-api:${project.jakarta_persistence_version}"
 	
 }
 

@@ -1,8 +1,10 @@
 package com.example.network;
 
 import com.example.ExampleMod;
+import com.example.database.DatabaseManager;
 import com.example.network.payload.MessagePayload;
 import com.example.proto.MessageProtos;
+import com.example.service.PlayerMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -21,6 +23,7 @@ public final class MessageNetworking {
             server.execute(() -> processIncomingMessage(player, payload));
         });
     }
+
 
     private static void processIncomingMessage(ServerPlayerEntity player, MessagePayload payload) {
         MessageProtos.Message message;
@@ -43,5 +46,14 @@ public final class MessageNetworking {
         }
 
         ExampleMod.LOGGER.info("Received message from {} ({}): {}", player.getGameProfile().getName(), player.getUuid(), text);
+
+        PlayerMessage dto = new PlayerMessage(player.getUuid(), text);
+        DatabaseManager.getMessageService().ifPresentOrElse(service -> {
+            try {
+                service.save(dto);
+            } catch (Exception e) {
+                ExampleMod.LOGGER.error("Failed to persist message for {}: {}", player.getGameProfile().getName(), e.getMessage(), e);
+            }
+        }, () -> ExampleMod.LOGGER.warn("PostgreSQL service unavailable; skipping persistence for {}", player.getGameProfile().getName()));
     }
 }
