@@ -20,8 +20,32 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+	main {
+		proto {
+			srcDir 'src/main/proto'
+		}
+		java {
+			srcDir "$buildDir/generated/source/proto/main/java"
+		}
+	}
+}
+
 loom {
 	splitEnvironmentSourceSets()
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:${project.protobuf_version}"
+	}
+	generateProtoTasks {
+		all().configureEach {
+			builtins {
+				java { }
+			}
+		}
+	}
+}
 
 	mods {
 		"modid" {
