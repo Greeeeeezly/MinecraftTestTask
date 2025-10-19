@@ -1,4 +1,4 @@
-# Message Screen Fabric Mod
+# Тестовое задание
 
 Fabric мод для Minecraft 1.21.8, который позволяет игроку отправлять произвольный текст с клиента на сервер, кодируя сообщение в Protobuf и сохраняя его в PostgreSQL через Hibernate.
 
